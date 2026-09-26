@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        try {
+          var origFetch = window.fetch;
+          var _fetch = origFetch ? origFetch.bind(window) : undefined;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return _fetch;
+            },
+            set: function(val) {
+              _fetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          // Fallback if defineProperty fails
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diallo Mamadou Bobo (tictos) -- Développeur Mobile, Web & Automatisation n8n</title>
+    <meta name="description" content="Portfolio de Diallo Mamadou Bobo (tictos) : Applications Mobiles Android (Kotlin), Plateformes Web (Django/Python), Automatisation de processus métiers n8n & Consulting pour PME." />
+    <meta property="og:title" content="Diallo Mamadou Bobo (tictos) -- Développeur Mobile, Web & Automatisation n8n" />
+    <meta property="og:description" content="Développeur Mobile, Web & Expert Automatisation n8n. Conception d'apps Android, solutions web et optimisation des flux opérationnels pour PME." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#0C0C0C] text-[#D7E2EA] antialiased selection:bg-[#B600A8] selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
