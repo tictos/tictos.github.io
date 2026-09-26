@@ -364,8 +364,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
             </div>
 
-            {/* Giant Title: Proportionate & bold on mobile, tablet, and desktop */}
-            <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-[12.5vw] sm:text-[13.5vw] md:text-[14.5vw] lg:text-[16vw]">
+            {/* Giant Title: Proportionate & bold on mobile, tablet, and desktop (Never cut off) */}
+            <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-[10vw] sm:text-[9vw] md:text-[8vw] lg:text-[7.2vw] xl:text-[6.5vw] 2xl:text-[5.8vw] max-w-full text-center">
               Hi, i&apos;m tictos
             </h1>
           </div>
