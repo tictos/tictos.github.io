@@ -134,7 +134,7 @@ Ce projet étant une application **Single Page Application (SPA)** basée sur Vi
 **Diallo Mamadou Bobo (tictos)**
 - **GitHub** : [@tictos](https://github.com/tictos)
 - **Plateforme TicHub** : [tichub.gitbuisnessformulaire.tech](https://tichub.gitbuisnessformulaire.tech)
-- **WhatsApp** : [+224 625 819 843](https://wa.me/224625819843)
+- **WhatsApp** : [+224 625 67 27 12](https://wa.me/224625672712)
 - **Email** : [tictos1213@gmail.com](mailto:tictos1213@gmail.com)
 
 ---

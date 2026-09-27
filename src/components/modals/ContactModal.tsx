@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, CheckCircle2, Sparkles, Mail, Phone, MessageSquare, Clock, ShieldCheck } from 'lucide-react';
+import { X, Send, CheckCircle2, Sparkles, Mail, Phone, MessageSquare, Clock, AlertCircle, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface ContactModalProps {
@@ -32,36 +32,77 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(null);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#B600A8', '#7621B0', '#BE4C00', '#BBCCD7'],
-        });
-      } catch {
-        // ignore fallback
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/tictos1213@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          _subject: `[Portfolio tictos] ${selectedSubject} - De ${name}`,
+          _replyto: email,
+          _captcha: 'false',
+          _template: 'table',
+          sujet: selectedSubject,
+          message: message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok || data.success === 'true' || data.success === true) {
+        setIsSuccess(true);
+        try {
+          confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#B600A8', '#7621B0', '#BE4C00', '#BBCCD7'],
+          });
+        } catch {
+          // ignore fallback
+        }
+      } else {
+        throw new Error(data.message || "Erreur lors de l'envoi");
       }
-    }, 800);
+    } catch (err) {
+      // Fallback: If network fails or is blocked by adblockers, propose mailto fallback
+      setErrorMessage(
+        "Impossible d'envoyer directement via le serveur. Vous pouvez utiliser le lien direct par email ci-dessous."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOpenMailto = () => {
+    const subject = encodeURIComponent(`[Portfolio tictos] ${selectedSubject}`);
+    const body = encodeURIComponent(
+      `Nom: ${name}\nEmail: ${email}\nSujet: ${selectedSubject}\n\nMessage:\n${message}`
+    );
+    window.location.href = `mailto:tictos1213@gmail.com?subject=${subject}&body=${body}`;
   };
 
   const handleWhatsApp = () => {
     const text = encodeURIComponent(
       `Bonjour Diallo, j'ai vu votre portfolio (tictos) et je souhaite échanger à propos de : ${selectedSubject}`
     );
-    window.open(`https://wa.me/224625819843?text=${text}`, '_blank');
+    window.open(`https://wa.me/224625672712?text=${text}`, '_blank');
   };
 
   const handleReset = () => {
     setIsSuccess(false);
+    setErrorMessage(null);
     setName('');
     setEmail('');
     setMessage('');
@@ -144,7 +185,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       <Phone className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="font-semibold text-white">+224 625 819 843</p>
+                      <p className="font-semibold text-white">+224 625 67 27 12</p>
                       <p className="text-[11px] text-[#D7E2EA]/60">Disponible sur WhatsApp &amp; Appel</p>
                     </div>
                   </div>
@@ -228,16 +269,39 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     />
                   </div>
 
+                  {/* Error banner if any */}
+                  {errorMessage && (
+                    <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>{errorMessage}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleOpenMailto}
+                        className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-white font-medium text-xs transition-colors cursor-pointer self-start"
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                        <span>Envoyer directement via votre application Mail</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+
                   {/* Trust metrics */}
                   <div className="flex flex-wrap items-center justify-between text-xs text-[#D7E2EA]/60 pt-1 pb-1">
                     <span className="inline-flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-[#B600A8]" />
                       Réponse garantie &lt; 24h
                     </span>
-                    <span className="inline-flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={handleOpenMailto}
+                      className="inline-flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+                    >
                       <Mail className="w-3.5 h-3.5 text-[#B600A8]" />
-                      tictos1213@gmail.com
-                    </span>
+                      <span>tictos1213@gmail.com</span>
+                    </button>
                   </div>
 
                   {/* Submit Button */}
